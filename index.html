@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fillme Networks — Where Stories Come Alive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@100;200;300;400;500;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #0f0f0f;
+    --surface: #141414;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --white: #f5f0e8;
+    --muted: #888880;
+    --line: rgba(201,168,76,0.18);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.4s, height 0.4s, border-color 0.3s;
+  }
+  body:hover .cursor-ring { border-color: var(--gold); }
+  a:hover ~ .cursor, button:hover ~ .cursor { width: 18px; height: 18px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.5s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    padding: 18px 60px;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-logo-icon {
+    width: 34px; height: 34px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-icon svg { width: 16px; height: 16px; fill: var(--gold); }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--gold);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 0.4s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+  .nav-cta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--gold);
+    padding: 10px 22px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; }
+  .hamburger span { width: 24px; height: 1px; background: var(--white); transition: all 0.3s; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh; min-height: 700px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 60%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      var(--black);
+  }
+  .hero-film-grain {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+  .hero-lines {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-lines::before, .hero-lines::after {
+    content: '';
+    position: absolute;
+    border: 1px solid var(--line);
+  }
+  .hero-lines::before {
+    top: 15%; bottom: 15%; left: 50%;
+    transform: translateX(-50%);
+    width: 70vw; border-left: none; border-right: none;
+  }
+  .hero-lines::after {
+    left: 15%; right: 15%; top: 50%;
+    transform: translateY(-50%);
+    height: 70vh; border-top: none; border-bottom: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.3s forwards;
+    margin-bottom: 24px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1.2s 0.5s forwards;
+    position: relative; z-index: 1;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+    display: block;
+  }
+  .hero-sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 28px;
+    max-width: 480px;
+    line-height: 1.8;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.8s forwards;
+  }
+  .hero-actions {
+    margin-top: 52px;
+    display: flex; gap: 20px; align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 1s forwards;
+  }
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--black);
+    padding: 16px 40px;
+    text-decoration: none;
+    transition: background 0.3s, letter-spacing 0.3s;
+    cursor: none;
+  }
+  .btn-primary:hover { background: var(--gold-light); letter-spacing: 0.28em; }
+  .btn-ghost {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    transition: gap 0.3s, color 0.3s;
+    cursor: none;
+  }
+  .btn-ghost:hover { gap: 18px; color: var(--gold); }
+  .btn-ghost svg { width: 18px; height: 18px; stroke: currentColor; fill: none; }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollDrop 2s 2s infinite;
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+    overflow: hidden;
+    background: var(--deep);
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 40px;
+    display: flex; align-items: center; gap: 40px;
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* SECTION COMMON */
+  section { position: relative; }
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--gold);
+  }
+
+  /* ABOUT / PARALLAX */
+  .about-section {
+    padding: 140px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .about-visual {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+  }
+  .about-img-bg {
+    position: absolute; inset: 0;
+    background: 
+      linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 50%),
+      var(--surface);
+    border: 1px solid var(--line);
+  }
+  .film-reel {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .film-strip {
+    display: flex; gap: 0;
+  }
+  .film-frame {
+    width: 80px; height: 70px;
+    border: 1px solid rgba(201,168,76,0.2);
+    position: relative;
+    overflow: hidden;
+    background: var(--deep);
+  }
+  .film-frame::before, .film-frame::after {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--black);
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .film-frame::before { top: 6px; left: 6px; }
+  .film-frame::after { top: 6px; right: 6px; }
+  .film-frame-inner {
+    position: absolute;
+    inset: 18px 4px 4px;
+    background: linear-gradient(
+      135deg,
+      rgba(201,168,76,0.15) 0%,
+      rgba(201,168,76,0.05) 50%,
+      rgba(201,168,76,0.08) 100%
+    );
+  }
+
+  .about-counter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 20px;
+  }
+  .about-counter-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 28px 24px;
+    transition: border-color 0.3s;
+  }
+  .about-counter-item:hover { border-color: var(--gold); }
+  .counter-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.2rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .counter-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+    display: block;
+  }
+
+  .about-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 28px;
+  }
+  .about-text h2 em { font-style: italic; color: var(--gold); }
+  .about-text p {
+    font-size: 0.95rem;
+    line-height: 1.95;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .services-list {
+    margin-top: 36px;
+    display: flex; flex-direction: column; gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .service-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: none;
+    transition: padding-left 0.3s;
+  }
+  .service-item:hover { padding-left: 12px; }
+  .service-item:hover .service-name { color: var(--gold); }
+  .service-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .service-arrow {
+    width: 20px; height: 20px;
+    stroke: var(--gold); fill: none;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .service-item:hover .service-arrow { opacity: 1; transform: translateX(0); }
+
+  /* PARALLAX REELS */
+  .reel-section {
+    padding: 100px 0;
+    overflow: hidden;
+    background: var(--deep);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .reel-header {
+    text-align: center;
+    padding: 0 60px;
+    margin-bottom: 70px;
+  }
+  .reel-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+  }
+  .reel-header h2 em { font-style: italic; color: var(--gold); }
+
+  .parallax-strip {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 3px;
+    will-change: transform;
+  }
+  .parallax-strip.reverse { animation: none; }
+
+  .reel-card {
+    flex: 0 0 340px;
+    height: 240px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s;
+    cursor: none;
+  }
+  .reel-card:hover { border-color: var(--gold); }
+  .reel-card-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.6s ease;
+  }
+  .reel-card:hover .reel-card-bg { transform: scale(1.04); }
+  .reel-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .reel-card:hover .reel-card-overlay { opacity: 1; }
+  .reel-card-content {
+    position: absolute; bottom: 20px; left: 20px; right: 20px;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s 0.1s, transform 0.4s 0.1s;
+  }
+  .reel-card:hover .reel-card-content { opacity: 1; transform: translateY(0); }
+  .reel-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .reel-card-cat {
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-top: 3px;
+  }
+  /* Card color patterns */
+  .c1 { background: linear-gradient(135deg, #1a1206 0%, #2a1e08 50%, #0f0d0a 100%); }
+  .c2 { background: linear-gradient(135deg, #0a0f1a 0%, #081220 50%, #050810 100%); }
+  .c3 { background: linear-gradient(135deg, #0f1a0a 0%, #0a1205 50%, #080e07 100%); }
+  .c4 { background: linear-gradient(135deg, #1a0a0a 0%, #200808 50%, #100505 100%); }
+  .c5 { background: linear-gradient(135deg, #1a1a1a 0%, #222 50%, #111 100%); }
+
+  /* CLIENTS */
+  .clients-section {
+    padding: 120px 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .clients-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .clients-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.2;
+  }
+  .clients-header h2 em { font-style: italic; color: var(--gold); }
+  .clients-header p {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+  }
+
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  .client-cell {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px 24px;
+    min-height: 90px;
+    transition: background 0.3s;
+    cursor: none;
+  }
+  .client-cell:hover { background: rgba(201,168,76,0.04); }
+  .client-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    transition: color 0.3s;
+  }
+  .client-cell:hover .client-name { color: var(--white); }
+
+  /* PROCESS */
+  .process-section {
+    padding: 120px 60px;
+    background: var(--deep);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .process-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .process-header {
+    margin-bottom: 80px;
+  }
+  .process-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    max-width: 500px;
+  }
+  .process-header h2 em { font-style: italic; color: var(--gold); }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--line);
+  }
+  .process-step {
+    padding: 44px 36px;
+    border-right: 1px solid var(--line);
+    position: relative;
+    transition: background 0.4s;
+    cursor: none;
+  }
+  .process-step:last-child { border-right: none; }
+  .process-step:hover { background: rgba(201,168,76,0.03); }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    color: rgba(201,168,76,0.12);
+    line-height: 1;
+    margin-bottom: 24px;
+    transition: color 0.3s;
+  }
+  .process-step:hover .step-num { color: rgba(201,168,76,0.25); }
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    color: var(--white);
+  }
+  .step-desc {
+    font-size: 0.85rem;
+    line-height: 1.85;
+    color: var(--muted);
+  }
+  .step-line {
+    position: absolute;
+    bottom: 0; left: 36px; right: 36px;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+  .process-step:hover .step-line { transform: scaleX(1); }
+
+  /* PARALLAX HERO 2 */
+  .parallax-cta {
+    position: relative;
+    height: 520px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    text-align: center;
+  }
+  .parallax-cta-bg {
+    position: absolute; inset: -40px;
+    background:
+      radial-gradient(ellipse 70% 70% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 60px,
+        rgba(201,168,76,0.025) 60px,
+        rgba(201,168,76,0.025) 61px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 60px,
+        rgba(201,168,76,0.025) 60px,
+        rgba(201,168,76,0.025) 61px
+      ),
+      var(--black);
+    will-change: transform;
+  }
+  .parallax-cta-content { position: relative; z-index: 1; }
+  .parallax-cta-content h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 32px;
+  }
+  .parallax-cta-content h2 em { font-style: italic; color: var(--gold); display: block; }
+
+  /* CONTACT */
+  .contact-section {
+    padding: 120px 60px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .contact-left h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+  .contact-left h2 em { font-style: italic; color: var(--gold); }
+  .contact-left p {
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 44px;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 18px; }
+  .contact-item {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .contact-item:hover { color: var(--white); }
+  .contact-item-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .contact-item:hover .contact-item-icon { border-color: var(--gold); background: rgba(201,168,76,0.07); }
+  .contact-item-icon svg { width: 14px; height: 14px; stroke: var(--gold); fill: none; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-group { position: relative; }
+  .form-group label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.3s;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(136,136,128,0.4); }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--gold); }
+  .form-group textarea { resize: none; height: 100px; }
+  .form-line {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 1px; width: 0;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+  .form-group input:focus ~ .form-line,
+  .form-group textarea:focus ~ .form-line { width: 100%; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .btn-submit {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 16px 44px;
+    cursor: none;
+    transition: background 0.3s, color 0.3s;
+    margin-top: 12px;
+    align-self: flex-start;
+  }
+  .btn-submit:hover { background: var(--gold); color: var(--black); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--deep);
+    padding: 60px 60px 40px;
+  }
+  .footer-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .footer-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .social-links { display: flex; gap: 14px; }
+  .social-btn {
+    width: 38px; height: 38px;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    transition: border-color 0.3s, background 0.3s;
+    cursor: none;
+  }
+  .social-btn:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .social-btn svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; transition: stroke 0.3s; }
+  .social-btn:hover svg { stroke: var(--gold); }
+
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-copy {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: rgba(136,136,128,0.5);
+  }
+  .footer-copy a { color: var(--gold); text-decoration: none; }
+
+  /* MOBILE NAV */
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(20px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 40px;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
+  }
+  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+  .close-btn {
+    position: absolute; top: 28px; right: 60px;
+    background: none; border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: none;
+    padding: 10px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  @keyframes scrollDrop {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    30% { opacity: 1; }
+    70% { transform: scaleY(1); transform-origin: top; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 22px 28px; }
+    nav.scrolled { padding: 16px 28px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .about-section { grid-template-columns: 1fr; gap: 50px; padding: 80px 28px; }
+    .about-visual { height: 320px; }
+    .clients-section { padding: 80px 28px; }
+    .clients-grid { grid-template-columns: repeat(3, 1fr); }
+    .process-section { padding: 80px 28px; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .process-step { border-right: none; border-bottom: 1px solid var(--line); }
+    .contact-section { grid-template-columns: 1fr; gap: 50px; padding: 80px 28px 60px; }
+    .form-grid { grid-template-columns: 1fr; }
+    footer { padding: 50px 28px 30px; }
+    .footer-top { flex-direction: column; gap: 28px; align-items: flex-start; }
+    .footer-bottom { flex-direction: column; gap: 14px; text-align: center; }
+    .reel-header { padding: 0 28px; }
+    .clients-header { padding: 0 10px; }
+    .parallax-cta { height: auto; padding: 80px 28px; }
+    .hero-title { font-size: clamp(3rem, 14vw, 6rem); }
+    .close-btn { right: 28px; }
+    .hero-actions { flex-direction: column; gap: 14px; }
+  }
+  @media (max-width: 500px) {
+    .clients-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-steps { grid-template-columns: 1fr; }
+    .about-counter-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14v-4zM3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+    </div>
+    Fill<span>me</span> Networks
+  </a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Let's Create</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-btn" onclick="toggleMenu()">Close ×</button>
+  <a href="#work" onclick="toggleMenu()">Work</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#clients" onclick="toggleMenu()">Clients</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-film-grain"></div>
+  <div class="hero-lines"></div>
+  <p class="hero-eyebrow">Award-Winning Production House · New Delhi · Est. 2015</p>
+  <h1 class="hero-title">
+    Crafting<br>
+    <em>Visual Stories</em><br>
+    That Move
+  </h1>
+  <p class="hero-sub">From brand films to documentaries — we translate bold ideas into cinematic experiences that connect, inspire, and endure.</p>
+  <div class="hero-actions">
+    <a href="#work" class="btn-primary">Explore Our Work</a>
+    <a href="#contact" class="btn-ghost">
+      Start a Project
+      <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item"><span>Brand Films</span><span class="marquee-dot"></span><span>Documentaries</span><span class="marquee-dot"></span><span>Corporate Videos</span><span class="marquee-dot"></span><span>Government Projects</span><span class="marquee-dot"></span><span>Digital Content</span><span class="marquee-dot"></span><span>Photography</span><span class="marquee-dot"></span><span>Post Production</span><span class="marquee-dot"></span><span>Animation</span><span class="marquee-dot"></span></div>
+    <div class="marquee-item"><span>Brand Films</span><span class="marquee-dot"></span><span>Documentaries</span><span class="marquee-dot"></span><span>Corporate Videos</span><span class="marquee-dot"></span><span>Government Projects</span><span class="marquee-dot"></span><span>Digital Content</span><span class="marquee-dot"></span><span>Photography</span><span class="marquee-dot"></span><span>Post Production</span><span class="marquee-dot"></span><span>Animation</span><span class="marquee-dot"></span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="services">
+  <div class="about-section">
+    <div class="about-visual reveal">
+      <div class="about-img-bg"></div>
+      <!-- Film reel visual -->
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;">
+        <div style="display:flex;gap:3px;">
+          <div class="film-frame"><div class="film-frame-inner"></div></div>
+          <div class="film-frame"><div class="film-frame-inner" style="background:linear-gradient(135deg,rgba(201,168,76,0.1) 0%,rgba(201,168,76,0.25) 100%)"></div></div>
+          <div class="film-frame"><div class="film-frame-inner"></div></div>
+          <div class="film-frame"><div class="film-frame-inner" style="background:linear-gradient(135deg,rgba(201,168,76,0.2) 0%,rgba(201,168,76,0.05) 100%)"></div></div>
+        </div>
+        <div style="display:flex;gap:3px;">
+          <div class="film-frame"><div class="film-frame-inner" style="background:linear-gradient(135deg,rgba(201,168,76,0.22) 0%,rgba(201,168,76,0.04) 100%)"></div></div>
+          <div class="film-frame"><div class="film-frame-inner"></div></div>
+          <div class="film-frame"><div class="film-frame-inner" style="background:linear-gradient(135deg,rgba(201,168,76,0.08) 0%,rgba(201,168,76,0.2) 100%)"></div></div>
+          <div class="film-frame"><div class="film-frame-inner"></div></div>
+        </div>
+        <div style="display:flex;gap:3px;">
+          <div class="film-frame"><div class="film-frame-inner"></div></div>
+          <div class="film-frame"><div class="film-frame-inner" style="background:linear-gradient(135deg,rgba(201,168,76,0.18) 0%,rgba(201,168,76,0.06) 100%)"></div></div>
+          <div class="film-frame"><div class="film-frame-inner" style="background:linear-gradient(135deg,rgba(201,168,76,0.04) 0%,rgba(201,168,76,0.22) 100%)"></div></div>
+          <div class="film-frame"><div class="film-frame-inner"></div></div>
+        </div>
+      </div>
+      <!-- Corner text -->
+      <div style="position:absolute;top:24px;left:24px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.6;">Since 2015</div>
+      </div>
+      <div style="position:absolute;bottom:24px;right:24px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);">New Delhi, India</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="section-label reveal">About Us</p>
+      <h2 class="reveal reveal-delay-1">We are <em>storytellers</em> with a camera</h2>
+      <p class="reveal reveal-delay-2">Fillme Networks is a full-service creative production house based in New Delhi, specializing in brand films, documentaries, government communications, and digital content that leaves a lasting impression.</p>
+      <p class="reveal reveal-delay-2">With over a decade of experience and more than 500 projects delivered, we partner with brands, ministries, and creative visionaries to bring stories to life.</p>
+      <div class="services-list reveal reveal-delay-3" id="services">
+        <div class="service-item"><span class="service-name">Brand & Corporate Films</span><svg class="service-arrow" viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="service-item"><span class="service-name">Documentary Production</span><svg class="service-arrow" viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="service-item"><span class="service-name">Government Campaigns</span><svg class="service-arrow" viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="service-item"><span class="service-name">Digital & Social Content</span><svg class="service-arrow" viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="service-item"><span class="service-name">Post Production & VFX</span><svg class="service-arrow" viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="service-item"><span class="service-name">Event Films & Photography</span><svg class="service-arrow" viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="about-counter-grid reveal reveal-delay-4">
+        <div class="about-counter-item"><span class="counter-number" data-target="500">0</span><span class="counter-label">Projects Delivered</span></div>
+        <div class="about-counter-item"><span class="counter-number" data-target="10">0</span><span class="counter-label">Years of Excellence</span></div>
+        <div class="about-counter-item"><span class="counter-number" data-target="80">0</span><span class="counter-label">Brand Partners</span></div>
+        <div class="about-counter-item"><span class="counter-number" data-target="25">0</span><span class="counter-label">Awards Won</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK REELS -->
+<section class="reel-section" id="work">
+  <div class="reel-header reveal">
+    <p class="section-label" style="justify-content:center;margin-bottom:20px;">Selected Work</p>
+    <h2>Stories We've <em>Told</em></h2>
+  </div>
+  <div class="parallax-strip" id="strip1">
+    <div class="reel-card"><div class="reel-card-bg c1"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Incredible India</div><div class="reel-card-cat">Government · Tourism</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c2"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Tata Power</div><div class="reel-card-cat">Brand Film · Energy</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c3"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Apollo Tyres</div><div class="reel-card-cat">Corporate · Automotive</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c4"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Namami Gange</div><div class="reel-card-cat">Government · Environment</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c5"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Fab India</div><div class="reel-card-cat">Brand Film · Retail</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c1"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">History TV18</div><div class="reel-card-cat">Documentary · Media</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c2"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Club Vistara</div><div class="reel-card-cat">Brand Film · Aviation</div></div></div>
+  </div>
+  <div class="parallax-strip reverse" id="strip2" style="margin-top:3px;">
+    <div class="reel-card"><div class="reel-card-bg c3"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Indian Coast Guard</div><div class="reel-card-cat">Government · Defense</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c4"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Liv Pure</div><div class="reel-card-cat">Brand Film · FMCG</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c5"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Pocket FM</div><div class="reel-card-cat">Digital · Audio</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c1"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">Livguard Solar</div><div class="reel-card-cat">Brand Film · Energy</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c2"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">KEI Industries</div><div class="reel-card-cat">Corporate · Manufacturing</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c3"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">PNB Housing</div><div class="reel-card-cat">Brand Film · Finance</div></div></div>
+    <div class="reel-card"><div class="reel-card-bg c4"></div><div class="reel-card-overlay"></div><div class="reel-card-content"><div class="reel-card-title">DIPR</div><div class="reel-card-cat">Government · Communications</div></div></div>
+  </div>
+  <div style="text-align:center;margin-top:56px;">
+    <a href="https://www.instagram.com/fillme_networks/" target="_blank" class="btn-ghost" style="display:inline-flex;">
+      View All Projects on Instagram
+      <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients">
+  <div class="clients-section">
+    <div class="clients-header reveal">
+      <p class="section-label" style="justify-content:center;">Trusted By</p>
+      <h2>Brands That <em>Believe</em> in the Power of Story</h2>
+      <p>From Fortune 500s to the Government of India — we've told stories that matter.</p>
+    </div>
+    <div class="clients-grid reveal">
+      <div class="client-cell"><span class="client-name">Apollo Tyres</span></div>
+      <div class="client-cell"><span class="client-name">Tata Power</span></div>
+      <div class="client-cell"><span class="client-name">Fab India</span></div>
+      <div class="client-cell"><span class="client-name">Livguard Solar</span></div>
+      <div class="client-cell"><span class="client-name">Liv Pure</span></div>
+      <div class="client-cell"><span class="client-name">Club Vistara</span></div>
+      <div class="client-cell"><span class="client-name">History TV18</span></div>
+      <div class="client-cell"><span class="client-name">Network 18</span></div>
+      <div class="client-cell"><span class="client-name">PNB Housing</span></div>
+      <div class="client-cell"><span class="client-name">KEI Industries</span></div>
+      <div class="client-cell"><span class="client-name">Pocket FM</span></div>
+      <div class="client-cell"><span class="client-name">Carlsberg</span></div>
+      <div class="client-cell"><span class="client-name">Ministry of Defence</span></div>
+      <div class="client-cell"><span class="client-name">Indian Coast Guard</span></div>
+      <div class="client-cell"><span class="client-name">NDMA</span></div>
+      <div class="client-cell"><span class="client-name">Namami Gange</span></div>
+      <div class="client-cell"><span class="client-name">Incredible India</span></div>
+      <div class="client-cell"><span class="client-name">NCRTC</span></div>
+      <div class="client-cell"><span class="client-name">Maccaferri</span></div>
+      <div class="client-cell"><span class="client-name">Gainwell</span></div>
+      <div class="client-cell"><span class="client-name">Mastercard</span></div>
+      <div class="client-cell"><span class="client-name">H&M</span></div>
+      <div class="client-cell"><span class="client-name">Posterscope</span></div>
+      <div class="client-cell"><span class="client-name">Uttarakhand Tourism</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section>
+  <div class="process-section">
+    <div class="process-inner">
+      <div class="process-header reveal">
+        <p class="section-label">Our Process</p>
+        <h2>How we bring <em>ideas</em> to screen</h2>
+      </div>
+      <div class="process-steps">
+        <div class="process-step reveal">
+          <div class="step-num">01</div>
+          <div class="step-title">Discovery & Brief</div>
+          <p class="step-desc">We immerse ourselves in your brand, audience, and goals. Every great film begins with deep understanding — not assumptions.</p>
+          <div class="step-line"></div>
+        </div>
+        <div class="process-step reveal reveal-delay-1">
+          <div class="step-num">02</div>
+          <div class="step-title">Concept & Script</div>
+          <p class="step-desc">Our writers and creative directors craft narratives that resonate emotionally and communicate powerfully.</p>
+          <div class="step-line"></div>
+        </div>
+        <div class="process-step reveal reveal-delay-2">
+          <div class="step-num">03</div>
+          <div class="step-title">Production</div>
+          <p class="step-desc">With our own fleet of equipment and an exceptional crew, we capture visuals that are as beautiful as they are purposeful.</p>
+          <div class="step-line"></div>
+        </div>
+        <div class="process-step reveal reveal-delay-3">
+          <div class="step-num">04</div>
+          <div class="step-title">Post & Delivery</div>
+          <p class="step-desc">Color grading, sound design, motion graphics — every frame is refined until the film stands exactly as it should.</p>
+          <div class="step-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARALLAX CTA -->
+<section class="parallax-cta">
+  <div class="parallax-cta-bg" id="parallaxBg"></div>
+  <div class="parallax-cta-content reveal">
+    <p class="section-label" style="justify-content:center;margin-bottom:20px;">Ready?</p>
+    <h2>Your next great<br><em>film starts here</em></h2>
+    <a href="#contact" class="btn-primary">Start a Conversation</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-section">
+    <div class="contact-left">
+      <p class="section-label reveal">Contact</p>
+      <h2 class="reveal reveal-delay-1">Let's make something <em>unforgettable</em></h2>
+      <p class="reveal reveal-delay-2">Whether you have a fully formed idea or just a spark — we'd love to hear from you. Our team responds within 24 hours.</p>
+      <div class="contact-info reveal reveal-delay-3">
+        <a href="tel:+919818180445" class="contact-item">
+          <div class="contact-item-icon"><svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          +91 98181 80445
+        </a>
+        <a href="mailto:hello@fillmenetworks.com" class="contact-item">
+          <div class="contact-item-icon"><svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          hello@fillmenetworks.com
+        </a>
+        <div class="contact-item">
+          <div class="contact-item-icon"><svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          New Delhi, India
+        </div>
+      </div>
+    </div>
+    <form class="contact-form reveal reveal-delay-2" onsubmit="handleSubmit(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Full name" required>
+          <div class="form-line"></div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@company.com" required>
+          <div class="form-line"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Company / Brand</label>
+        <input type="text" placeholder="Your organization">
+        <div class="form-line"></div>
+      </div>
+      <div class="form-group">
+        <label>Project Type</label>
+        <select>
+          <option value="" disabled selected style="background:var(--black)">Select a service</option>
+          <option style="background:var(--black)">Brand Film</option>
+          <option style="background:var(--black)">Documentary</option>
+          <option style="background:var(--black)">Corporate Video</option>
+          <option style="background:var(--black)">Government Campaign</option>
+          <option style="background:var(--black)">Digital Content</option>
+          <option style="background:var(--black)">Post Production</option>
+          <option style="background:var(--black)">Other</option>
+        </select>
+        <div class="form-line"></div>
+      </div>
+      <div class="form-group">
+        <label>Tell us about your project</label>
+        <textarea placeholder="Briefly describe your vision, timeline, and budget range..."></textarea>
+        <div class="form-line"></div>
+      </div>
+      <button type="submit" class="btn-submit">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <a href="#home" class="footer-logo">Fill<span>me</span> Networks</a>
+    <ul class="footer-links">
+      <li><a href="#work">Films</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#clients">Clients</a></li>
+      <li><a href="#contact">Connect</a></li>
+    </ul>
+    <div class="social-links">
+      <a href="https://www.youtube.com/@FillmeNetworks" target="_blank" class="social-btn" title="YouTube">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20.06 12 20.06 12 20.06s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z" stroke-linecap="round" stroke-linejoin="round"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/fillme-networks" target="_blank" class="social-btn" title="LinkedIn">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.instagram.com/fillme_networks/" target="_blank" class="social-btn" title="Instagram">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" stroke-linecap="round" stroke-linejoin="round"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 <a href="#">Fillme Networks Private Limited</a>. All rights reserved.</p>
+    <p class="footer-copy" style="letter-spacing:0.15em;">New Delhi · India</p>
+  </div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+  function animRing() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(animRing); }
+  animRing();
+  document.querySelectorAll('a, button, .service-item, .reel-card, .client-cell, .process-step, .about-counter-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width='18px'; cursor.style.height='18px'; ring.style.width='52px'; ring.style.height='52px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+  });
+
+  // NAV SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
+
+  // MOBILE MENU
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // REVEAL ON SCROLL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // COUNTER ANIMATION
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    let current = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      current += step;
+      if(current >= target) { el.textContent = target + '+'; clearInterval(timer); }
+      else el.textContent = Math.floor(current);
+    }, 25);
+  }
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { animateCounter(e.target); counterObserver.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-target]').forEach(c => counterObserver.observe(c));
+
+  // HORIZONTAL SCROLL STRIPS (auto-scroll)
+  const strip1 = document.getElementById('strip1');
+  const strip2 = document.getElementById('strip2');
+  // Duplicate cards for infinite scroll
+  [strip1, strip2].forEach(strip => {
+    const clone = strip.innerHTML;
+    strip.innerHTML += clone;
+  });
+  let s1pos = 0, s2pos = 0;
+  function animStrips() {
+    s1pos -= 0.5;
+    s2pos += 0.4;
+    const w1 = strip1.scrollWidth / 2;
+    const w2 = strip2.scrollWidth / 2;
+    if(Math.abs(s1pos) >= w1) s1pos = 0;
+    if(s2pos >= 0) s2pos = -w2;
+    strip1.style.transform = `translateX(${s1pos}px)`;
+    strip2.style.transform = `translateX(${s2pos}px)`;
+    requestAnimationFrame(animStrips);
+  }
+  s2pos = -(strip2.scrollWidth / 2);
+  animStrips();
+
+  // PARALLAX BG
+  const parallaxBg = document.getElementById('parallaxBg');
+  window.addEventListener('scroll', () => {
+    const rect = parallaxBg.parentElement.getBoundingClientRect();
+    const offset = -(rect.top * 0.3);
+    parallaxBg.style.transform = `translateY(${offset}px)`;
+  });
+
+  // FORM SUBMIT
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-submit');
+    btn.textContent = 'Message Sent ✓';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--black)';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; btn.style.color = ''; e.target.reset(); }, 3000);
+  }
+</script>
+</body>
+</html>
